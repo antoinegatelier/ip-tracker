@@ -1,13 +1,111 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --darkGray: hsl(0, 0%, 17%);
+  --lightGray: hsl(0, 0%, 59%);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: 'Rubik', sans-serif;
+  font-size: 18px;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.header {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 25vh; 
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem;
+  z-index: 2;
+}
+
+#map {
+  margin: 0 auto;
+  height: 550px;
+  width: 100vw;
+  
+}
+
+h1 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: white;
+  text-align: center;
+}
+
+h2 {
+  color: var(--lightGray);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  margin-bottom: 0.8rem;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  width: 50vw;
+  margin: 0 auto;
+}
+
+input {
+  border: none;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+  height: 2rem;
+  flex-grow: 13;
+  outline: none;
+  padding: 0 1rem;
+  color: var(--darfGray);
+  font-weight: 400;
+  font-family: 'Rubik', sans-serif;
+}
+
+input:hover {
+  cursor: pointer;
+}
+
+button {
+  font-weight: 700;
+  color: white;
+  background-color: black;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
+  border: none;
+  flex-grow: 1;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: hsla(0, 0%, 17%, 90%);
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0 auto;
+  width: 80vw;
+  height: auto;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0px 1px 5px var(--lightGray);
+}
+
+.grid-item {
+  width: auto;
+  height: 150px;
+  padding: 2rem;
+}
+
+p {
+  font-weight: 500;
 }
