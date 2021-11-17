@@ -5,34 +5,12 @@ import { useState, useEffect } from 'react';
 
 function App() {
 
-  const [ip, setIp] = useState({
-    id: 'ip',
-    title: 'ip address',
-    data: ''
-  });
-
-  const [location, setLocation] = useState({
-    id: 'location',
-    title: 'location',
-    data: ''
-  })
-
-  const [utc, setUtc] = useState({
-    id: 'utc',
-    title: 'timezone',
-    data: ''
-  })
-
-  const [isp, setIsp] = useState({
-    id: 'isp',
-    title: 'isp',
-    data: ''
-  })
-
-  const [position, setPosition] = useState({
-    latitude: 0,
-    longitude: 0
-  })
+  const [error, setError] = useState({ isTrue: false, reason: '' });
+  const [ip, setIp] = useState({ id: 'ip', title: 'ip address', data: '' });
+  const [location, setLocation] = useState({ id: 'location', title: 'location', data: '' })
+  const [utc, setUtc] = useState({ id: 'utc', title: 'timezone', data: '' })
+  const [isp, setIsp] = useState({ id: 'isp', title: 'isp', data: '' })
+  const [position, setPosition] = useState({ latitude: 0, longitude: 0 })
 
   const getIP = async (inputIp = null) => {
     let request;
@@ -46,37 +24,24 @@ function App() {
     await fetch(`https://ipapi.co/${request}/json/`)
       .then(response => response.json())
       .then(json => {
-        console.log(json)
-        setIp({
-          ...ip,
-          data: json.ip
-        });
-        setLocation({
-          ...location,
-          data: json.city
-        });
-        setUtc({
-          ...utc,
-          data: `${json.utc_offset.slice(0, 3)}:${json.utc_offset.slice(3)}`
-        });
-        setIsp({
-          ...isp,
-          data: json.org
-        });
-        setPosition({
-          latitude: json.latitude,
-          longitude: json.longitude
-        });
+        if (json.error === true) {
+          setError({ isTrue: true, reason: json.reason })
+          return;
+        };
+        setError({ isTrue: false, reason: '' });
+        setIp({ ...ip, data: json.ip });
+        setLocation({ ...location, data: `${json.city}, ${json.country_name}` });
+        if (json.utc_offset) { setUtc({ ...utc, data: `UTC ${json.utc_offset.slice(0, 3)}:${json.utc_offset.slice(3)}` }); } else { setUtc({ ...utc, data: `N/A` }) }
+        setIsp({ ...isp, data: json.org });
+        if(json.latitude && json.longitude) {setPosition({ latitude: json.latitude, longitude: json.longitude });}
       });
   }
 
-  useEffect(() => {
-    getIP();
-  }, []);
+  useEffect(() => { getIP() }, []);
 
   return (
     <div className="App">
-      <Header getIP={getIP} ip={ip} location={location} utc={utc} isp={isp} />
+      <Header getIP={getIP} ip={ip} location={location} utc={utc} isp={isp} error={error} />
       {position.latitude === 0 || position.longitude === 0 ? <div id='map'>Loading map</div> : <Map latitude={position.latitude} longitude={position.longitude} />}
       <div className="attribution">
         Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank" rel='noreferrer'>Frontend Mentor</a>.
