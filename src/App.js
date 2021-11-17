@@ -37,6 +37,7 @@ function App() {
       });
   }
 
+// eslint-disable-next-line
   useEffect(() => { getIP() }, []);
 
   return (
