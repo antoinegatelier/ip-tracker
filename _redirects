@@ -1,0 +1,2 @@
+/api/*  https://api.ipify.org/:splat
+/api/*  https://ipapi.co/:splat
