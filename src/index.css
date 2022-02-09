@@ -29,6 +29,12 @@ html {
   z-index: 2;
 }
 
+.attribution {
+  width: 80vw;
+  text-align: center;
+  margin: 0 auto;
+}
+
 #map {
   margin: 0 auto;
   height: 550px;
@@ -146,8 +152,12 @@ p {
   display: none;
 }
 
-@media screen and (max-width: 600px)  {
+@media screen and (max-width: 600px) {
  
+  html {
+    font-size: 14px;
+  }
+
   .grid-container {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(4, 1fr);

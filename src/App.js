@@ -12,29 +12,32 @@ function App() {
   const [isp, setIsp] = useState({ id: 'isp', title: 'isp', data: '' })
   const [position, setPosition] = useState({ latitude: 0, longitude: 0 })
 
-  const getIP = async (inputIp = null) => {
-    let request;
-    if (inputIp === null) {
-      request = await fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
-        .then(json => json.ip);
-    } else {
-      request = inputIp;
+
+  const parseInfoIP = (json) => {
+    if (json.error === true) {
+      setError({ isTrue: true, reason: json.reason })
+      return;
     };
-    await fetch(`https://ipapi.co/${request}/json/`)
+    setError({ isTrue: false, reason: '' });
+    setIp({ ...ip, data: json.ip });
+    setLocation({ ...location, data: `${json.city}, ${json.country_name}` });
+    if (json.utc_offset) { setUtc({ ...utc, data: `UTC ${json.utc_offset.slice(0, 3)}:${json.utc_offset.slice(3)}` }); } else { setUtc({ ...utc, data: `N/A` }) }
+    setIsp({ ...isp, data: json.org });
+    if(json.latitude && json.longitude) {setPosition({ latitude: json.latitude, longitude: json.longitude });}
+  };
+  
+  const getIP = async (inputIp = null) => {
+      if (inputIp === null) {
+      await fetch('https://ipapi.co/json')
+        .then(response => response.json())
+        .then(json => parseInfoIP(json));
+    } else {
+    await fetch(`https://ipapi.co/${inputIp}/json/`)
       .then(response => response.json())
       .then(json => {
-        if (json.error === true) {
-          setError({ isTrue: true, reason: json.reason })
-          return;
-        };
-        setError({ isTrue: false, reason: '' });
-        setIp({ ...ip, data: json.ip });
-        setLocation({ ...location, data: `${json.city}, ${json.country_name}` });
-        if (json.utc_offset) { setUtc({ ...utc, data: `UTC ${json.utc_offset.slice(0, 3)}:${json.utc_offset.slice(3)}` }); } else { setUtc({ ...utc, data: `N/A` }) }
-        setIsp({ ...isp, data: json.org });
-        if(json.latitude && json.longitude) {setPosition({ latitude: json.latitude, longitude: json.longitude });}
+        parseInfoIP(json)
       });
+    };
   }
 
 // eslint-disable-next-line
